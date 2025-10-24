@@ -1,4 +1,4 @@
-package com.joseramos.sistemaadocao;
+package com.joseramos.sistemaadocao.casoPrecise;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

@@ -1,4 +1,4 @@
-package com.joseramos.sistemaadocao;
+package com.joseramos.sistemaadocao.casoPrecise;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

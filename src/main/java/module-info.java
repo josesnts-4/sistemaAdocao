@@ -10,4 +10,6 @@ module com.joseramos.sistemaadocao {
 
     opens com.joseramos.sistemaadocao to javafx.fxml;
     exports com.joseramos.sistemaadocao;
+    exports com.joseramos.sistemaadocao.casoPrecise;
+    opens com.joseramos.sistemaadocao.casoPrecise to javafx.fxml;
 }
