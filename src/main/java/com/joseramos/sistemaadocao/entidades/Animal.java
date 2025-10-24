@@ -7,16 +7,16 @@ public abstract class Animal {
     private String sexo;
     private String porte;
     private String descricao;
-    private boolean disponivel;
+    private String disponivel;
 
-    public Animal(String nome, String raca, String idade, String sexo, String porte, String descricao) {
+    public Animal(String nome, String raca, String idade, String sexo, String porte, String descricao, String disponivel) {
         this.nome = nome;
         this.raca = raca;
         this.idade = idade;
         this.sexo = sexo;
         this.porte = porte;
         this.descricao = descricao;
-        this.disponivel = true;
+        this.disponivel = disponivel;
     }
 
     public abstract void emitirSom();
@@ -69,11 +69,11 @@ public abstract class Animal {
         this.descricao = descricao;
     }
 
-    public boolean isDisponivel() {
+    public String isDisponivel() {
         return disponivel;
     }
 
-    public void setDisponivel(boolean disponivel) {
+    public void setDisponivel(String disponivel) {
         this.disponivel = disponivel;
     }
 

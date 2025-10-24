@@ -1,4 +1,12 @@
 package com.joseramos.sistemaadocao.entidades;
 
-public class Gato {
+public class Gato extends Animal {
+    public Gato(String nome, String raca, String idade, String sexo, String porte, String descricao) {
+        super(nome, raca, idade, sexo, porte, descricao);
+    }
+
+    @Override
+    public void emitirSom() {
+        System.out.println("Miau!");
+    }
 }
