@@ -1,25 +1,54 @@
 package com.joseramos.sistemaadocao.entidades;
 
+import jakarta.persistence.*;
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Animal {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String nome;
     private String raca;
-    private String idade;
+    private Integer idade;
     private String sexo;
-    private String porte;
     private String descricao;
-    private String disponivel;
+    private String tipo;
+    private StatusAnimal status;
 
-    public Animal(String nome, String raca, String idade, String sexo, String porte, String descricao, String disponivel) {
+    public Animal() {
+    }
+
+    public Animal(String nome, String raca, Integer idade, String sexo, String descricao, String tipo) {
         this.nome = nome;
         this.raca = raca;
         this.idade = idade;
         this.sexo = sexo;
-        this.porte = porte;
         this.descricao = descricao;
-        this.disponivel = disponivel;
+        this.tipo = tipo;
     }
 
     public abstract void emitirSom();
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public StatusAnimal getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusAnimal status) {
+        this.status = status;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
 
     public String getNome() {
         return nome;
@@ -37,11 +66,11 @@ public abstract class Animal {
         this.raca = raca;
     }
 
-    public String getIdade() {
+    public Integer getIdade() {
         return idade;
     }
 
-    public void setIdade(String idade) {
+    public void setIdade(Integer idade) {
         this.idade = idade;
     }
 
@@ -53,14 +82,6 @@ public abstract class Animal {
         this.sexo = sexo;
     }
 
-    public String getPorte() {
-        return porte;
-    }
-
-    public void setPorte(String porte) {
-        this.porte = porte;
-    }
-
     public String getDescricao() {
         return descricao;
     }
@@ -69,16 +90,8 @@ public abstract class Animal {
         this.descricao = descricao;
     }
 
-    public String isDisponivel() {
-        return disponivel;
-    }
-
-    public void setDisponivel(String disponivel) {
-        this.disponivel = disponivel;
-    }
-
     @Override
     public String toString() {
-        return "Animal:\n nome=" + nome + ", raca=" + raca + ", idade=" + idade + ", sexo=" + sexo + ", porte=" + porte + ", descricao=" + descricao + ", disponivel=" + disponivel;
+        return "Animal:\n nome=" + nome + ", raca=" + raca + ", idade=" + idade + ", sexo=" + sexo + ", descricao=" + descricao;
     }
 }

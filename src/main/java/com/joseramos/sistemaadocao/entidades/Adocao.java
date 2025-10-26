@@ -12,8 +12,6 @@ public class Adocao {
         this.adotante = adotante;
         this.dataAdocao = dataAdocao;
 
-        //Atualiza status do animal para adotado
-        this.animal.setDisponivel("Adotado");
 
         //Adiciona esta adoção ao adotante
         this.adotante.adicionarAdocao(this);

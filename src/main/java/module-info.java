@@ -7,9 +7,10 @@ module com.joseramos.sistemaadocao {
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
+    requires jakarta.persistence;
 
-    opens com.joseramos.sistemaadocao to javafx.fxml;
-    exports com.joseramos.sistemaadocao;
-    exports com.joseramos.sistemaadocao.casoPrecise;
-    opens com.joseramos.sistemaadocao.casoPrecise to javafx.fxml;
+    exports com.joseramos.sistemaadocao.entidades;
+    exports com.joseramos.sistemaadocao.service;
+    exports com.joseramos.sistemaadocao.repository;
+    exports com.joseramos.sistemaadocao.GUI;
 }
