@@ -6,7 +6,7 @@ import com.joseramos.sistemaadocao.entidades.Gato;
 import com.joseramos.sistemaadocao.entidades.StatusAnimal;
 import com.joseramos.sistemaadocao.repository.AnimalRepository;
 import com.joseramos.sistemaadocao.repository.AnimalRepositoryImpl;
-import com.joseramos.sistemaadocao.service.AnimalService;
+import com.joseramos.sistemaadocao.service.AdocaoService;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,7 +24,7 @@ import javafx.stage.Stage;
             // 1. Inicializa o Serviço e Repositório
             // A GUI DEVE usar o mesmo serviço/repositório
             private final AnimalRepository animalRepository = new AnimalRepositoryImpl();
-            private final AnimalService animalService = new AnimalService(animalRepository);
+            private final AdocaoService animalService = new AdocaoService(animalRepository);
 
             // Componentes da UI
             private final TableView<Animal> animalTable = new TableView<>();

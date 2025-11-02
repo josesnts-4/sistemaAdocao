@@ -12,7 +12,6 @@ public class Adocao {
         this.adotante = adotante;
         this.dataAdocao = dataAdocao;
 
-
         //Adiciona esta adoção ao adotante
         this.adotante.adicionarAdocao(this);
     }

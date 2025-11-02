@@ -1,9 +1,10 @@
 package com.joseramos.sistemaadocao.entidades;
 
+import com.joseramos.sistemaadocao.interfaces.CuidadosEspeciais;
 import jakarta.persistence.*;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Animal {
+public abstract class Animal implements CuidadosEspeciais {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +28,6 @@ public abstract class Animal {
         this.descricao = descricao;
         this.tipo = tipo;
     }
-
-    public abstract void emitirSom();
 
     public Integer getId() {
         return id;
@@ -90,8 +89,15 @@ public abstract class Animal {
         this.descricao = descricao;
     }
 
+    public abstract void emitirSom();
+
     @Override
-    public String toString() {
-        return "Animal:\n nome=" + nome + ", raca=" + raca + ", idade=" + idade + ", sexo=" + sexo + ", descricao=" + descricao;
+    public void vacinar() {
+        System.out.println("Animal vacinado!");
+    }
+
+    @Override
+    public void vermifugar() {
+        System.out.println("Animal vermifugado!");
     }
 }

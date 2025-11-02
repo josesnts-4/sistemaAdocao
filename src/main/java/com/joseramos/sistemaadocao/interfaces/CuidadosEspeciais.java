@@ -1,4 +1,8 @@
 package com.joseramos.sistemaadocao.interfaces;
 
-public class CuidadosEspeciais {
+public interface CuidadosEspeciais {
+    // metodo para vacinar
+    public void vacinar();
+    // metodo para vermifugar
+    public void vermifugar();
 }

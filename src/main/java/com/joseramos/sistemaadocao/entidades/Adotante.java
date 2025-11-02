@@ -8,11 +8,9 @@ public class Adotante {
     private String telefone;
     private String endereco;
     private String cpf;
-    private List<Adocao> adocoes;
+    private int totalAnimaisAdotados;
 
-    public Adotante(List<Adocao> adocoes) {
-        this.adocoes = adocoes;
-    }
+
 
     public Adotante(String nome, String cpf) {
         this.nome = nome;
@@ -24,12 +22,13 @@ public class Adotante {
         this.email = email;
         this.telefone = telefone;
     }
-    public void adicionarAdocao(Adocao adocao) {
-        adocoes.add(adocao);
+
+    public int getTotalAnimaisAdotados() {
+        return totalAnimaisAdotados;
     }
 
-    public int contarAnimaisAdotados() {
-        return adocoes.size();
+    public void setTotalAnimaisAdotados(int totalAnimaisAdotados) {
+        this.totalAnimaisAdotados = totalAnimaisAdotados;
     }
 
     public String getNome() {
@@ -72,14 +71,6 @@ public class Adotante {
         this.cpf = cpf;
     }
 
-    public List<Adocao> getAdocoes() {
-        return adocoes;
-    }
-
-    public void setAdocoes(List<Adocao> adocoes) {
-        this.adocoes = adocoes;
-    }
-
     @Override
     public String toString() {
         return "===== Adotante ===== \n" +
@@ -87,7 +78,6 @@ public class Adotante {
                 "\n email: " + email +
                 "\n telefone: " + telefone +
                 "\n endereco: " + endereco +
-                "\n cpf: " + cpf +
-                "\n adocoes: " + adocoes;
+                "\n cpf: " + cpf;
     }
 }
