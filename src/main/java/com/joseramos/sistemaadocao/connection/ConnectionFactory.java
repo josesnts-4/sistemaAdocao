@@ -1,6 +1,8 @@
 package com.joseramos.sistemaadocao.connection;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class ConnectionFactory {
 
@@ -12,7 +14,8 @@ public class ConnectionFactory {
                 // Carrega o driver (embora em JDBC 4.0+ não seja estritamente necessário)
                 Class.forName("org.sqlite.JDBC");
                 return DriverManager.getConnection(DB_URL);
-            } catch (SQLException | ClassNotFoundException e) {
+            } catch (
+                    SQLException | ClassNotFoundException e) {
                 System.err.println("Erro ao conectar ao banco de dados: " + e.getMessage());
                 return null;
             }

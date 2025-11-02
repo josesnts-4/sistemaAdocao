@@ -11,30 +11,24 @@ public abstract class Animal implements CuidadosEspeciais {
     private Integer id;
     private String nome;
     private String raca;
-    private Integer idade;
-    private String sexo;
-    private String descricao;
-    private String tipo;
+    private Integer idade;;
     private StatusAnimal status;
 
     public Animal() {
     }
 
-    public Animal(String nome, String raca, Integer idade, String sexo, String descricao, String tipo) {
+    public Animal(String nome, String raca, Integer idade) {
         this.nome = nome;
         this.raca = raca;
         this.idade = idade;
-        this.sexo = sexo;
-        this.descricao = descricao;
-        this.tipo = tipo;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public StatusAnimal getStatus() {
@@ -43,10 +37,6 @@ public abstract class Animal implements CuidadosEspeciais {
 
     public void setStatus(StatusAnimal status) {
         this.status = status;
-    }
-
-    public String getTipo() {
-        return tipo;
     }
 
     public String getNome() {
@@ -71,22 +61,6 @@ public abstract class Animal implements CuidadosEspeciais {
 
     public void setIdade(Integer idade) {
         this.idade = idade;
-    }
-
-    public String getSexo() {
-        return sexo;
-    }
-
-    public void setSexo(String sexo) {
-        this.sexo = sexo;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
     }
 
     public abstract void emitirSom();

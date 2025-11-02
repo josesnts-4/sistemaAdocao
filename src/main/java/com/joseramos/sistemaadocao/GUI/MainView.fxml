@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<TabPane fx:id="mainTabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.joseramos.sistemaadocao.GUI.view.MainViewController">
+    <tabs>
+        <Tab text="Gerenciar Animais">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <Label layoutX="14.0" layoutY="14.0" text="Animais Cadastrados">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <TableView fx:id="animaisTable" layoutX="14.0" layoutY="50.0" prefHeight="360.0" prefWidth="550.0">
+                            <columns>
+                                <TableColumn fx:id="colAnimalId" prefWidth="50.0" text="ID" />
+                                <TableColumn fx:id="colAnimalNome" prefWidth="150.0" text="Nome" />
+                                <TableColumn fx:id="colAnimalTipo" prefWidth="100.0" text="Tipo" />
+                                <TableColumn fx:id="colAnimalRaca" prefWidth="140.0" text="Raça" />
+                                <TableColumn fx:id="colAnimalStatus" prefWidth="100.0" text="Status" />
+                            </columns>
+                        </TableView>
+                        <VBox layoutX="575.0" layoutY="50.0" prefHeight="140.0" prefWidth="110.0" spacing="10.0">
+                            <children>
+                                <Button fx:id="btnNovoAnimal" mnemonicParsing="false" prefWidth="100.0" text="Novo Animal..." />
+                                <Button fx:id="btnEditarAnimal" mnemonicParsing="false" prefWidth="100.0" text="Editar..." />
+                                <Button fx:id="btnRemoverAnimal" mnemonicParsing="false" prefWidth="100.0" text="Remover" />
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+
+        <Tab text="Gerenciar Adotantes">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <Label layoutX="14.0" layoutY="14.0" text="Adotantes Cadastrados">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <TableView fx:id="adotantesTable" layoutX="14.0" layoutY="50.0" prefHeight="360.0" prefWidth="550.0">
+                            <columns>
+                                <TableColumn fx:id="colAdotanteId" prefWidth="50.0" text="ID" />
+                                <TableColumn fx:id="colAdotanteNome" prefWidth="180.0" text="Nome" />
+                                <TableColumn fx:id="colAdotanteCpf" prefWidth="140.0" text="CPF" />
+                                <TableColumn fx:id="colAdotanteTotal" prefWidth="150.0" text="Nº de Adoções" />
+                            </columns>
+                        </TableView>
+                        <VBox layoutX="575.0" layoutY="50.0" prefHeight="140.0" prefWidth="110.0" spacing="10.0">
+                            <children>
+                                <Button fx:id="btnNovoAdotante" mnemonicParsing="false" prefWidth="100.0" text="Novo Adotante..." />
+                                <Button fx:id="btnEditarAdotante" mnemonicParsing="false" prefWidth="100.0" text="Editar..." />
+                                <Button fx:id="btnRemoverAdotante" mnemonicParsing="false" prefWidth="100.0" text="Remover" />
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+
+        <Tab text="Realizar Adoção">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <Label layoutX="14.0" layoutY="14.0" text="Registrar Nova Adoção">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="14.0" layoutY="60.0" text="ID do Animal para Adotar:" />
+                        <TextField fx:id="txtAdocaoIdAnimal" layoutX="160.0" layoutY="55.0" promptText="Ex: 1" />
+                        <Label layoutX="14.0" layoutY="95.0" text="ID do Adotante:" />
+                        <TextField fx:id="txtAdocaoIdAdotante" layoutX="160.0" layoutY="90.0" promptText="Ex: 2" />
+                        <Button fx:id="btnRealizarAdocao" layoutX="160.0" layoutY="130.0" mnemonicParsing="false" onAction="#handleRealizarAdocao" prefWidth="149.0" text="CONFIRMAR ADOÇÃO">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Button>
+                        <Label layoutX="14.0" layoutY="200.0" text="Listagem de Adoções (com filtros) [cite: 17]">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <TableView fx:id="adocoesTable" layoutX="14.0" layoutY="235.0" prefHeight="220.0" prefWidth="670.0">
+                            <columns>
+                                <TableColumn fx:id="colAdocaoId" prefWidth="50.0" text="ID" />
+                                <TableColumn fx:id="colAdocaoData" prefWidth="120.0" text="Data" />
+                                <TableColumn fx:id="colAdocaoAnimal" prefWidth="250.0" text="Animal" />
+                                <TableColumn fx:id="colAdocaoAdotante" prefWidth="240.0" text="Adotante" />
+                            </columns>
+                        </TableView>
+                        <Label layoutX="340.0" layoutY="60.0" text="Filtrar por ID do Adotante:" />
+                        <TextField fx:id="txtFiltroAdotanteId" layoutX="490.0" layoutY="55.0" promptText="Ex: 2" />
+                        <Button fx:id="btnFiltrarAdocoes" layoutX="490.0" layoutY="90.0" mnemonicParsing="false" onAction="#handleFiltrarAdocoes" prefWidth="149.0" text="Filtrar" />
+                        <Button fx:id="btnLimparFiltroAdocoes" layoutX="490.0" layoutY="130.0" mnemonicParsing="false" onAction="#handleLimparFiltroAdocoes" prefWidth="149.0" text="Limpar Filtro / Ver Todas" />
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>

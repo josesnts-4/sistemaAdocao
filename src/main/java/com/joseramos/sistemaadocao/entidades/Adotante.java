@@ -1,58 +1,52 @@
 package com.joseramos.sistemaadocao.entidades;
 
-import java.util.*;
-
 public class Adotante {
+
+    private Integer id;
     private String nome;
-    private String email;
-    private String telefone;
     private String endereco;
     private String cpf;
-    private int totalAnimaisAdotados;
+    private Integer totalAdocoes;
 
-
+    public Adotante() {
+    }
 
     public Adotante(String nome, String cpf) {
         this.nome = nome;
         this.cpf = cpf;
+        this.totalAdocoes = 0;
     }
 
-    public Adotante(String nome, String email, String telefone) {
+    public Adotante(String nome, String endereco, String cpf) {
         this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
+        this.endereco = endereco;
+        this.cpf = cpf;
+        this.totalAdocoes = 0;
     }
 
-    public int getTotalAnimaisAdotados() {
-        return totalAnimaisAdotados;
+    public int getTotalAdocoes() {
+        return totalAdocoes;
     }
 
-    public void setTotalAnimaisAdotados(int totalAnimaisAdotados) {
-        this.totalAnimaisAdotados = totalAnimaisAdotados;
+    public void setTotalAdocoes(int totalAdocoes) {
+        this.totalAdocoes = totalAdocoes;
     }
 
     public String getNome() {
         return nome;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
     }
 
     public String getEndereco() {
@@ -74,10 +68,7 @@ public class Adotante {
     @Override
     public String toString() {
         return "===== Adotante ===== \n" +
-                "nome: " + nome +
-                "\n email: " + email +
-                "\n telefone: " + telefone +
-                "\n endereco: " + endereco +
+                "nome: " + nome + "\n endereco: " + endereco +
                 "\n cpf: " + cpf;
     }
 }

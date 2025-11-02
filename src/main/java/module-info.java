@@ -13,4 +13,5 @@ module com.joseramos.sistemaadocao {
     exports com.joseramos.sistemaadocao.service;
     exports com.joseramos.sistemaadocao.repository;
     exports com.joseramos.sistemaadocao.GUI;
+    exports com.joseramos.sistemaadocao.GUI.view;
 }
