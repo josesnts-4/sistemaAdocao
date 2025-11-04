@@ -1,7 +1,5 @@
 package com.joseramos.sistemaadocao.entidades;
 
-import jakarta.persistence.*;
-
 public class Gato extends Animal {
 
     public Gato() {

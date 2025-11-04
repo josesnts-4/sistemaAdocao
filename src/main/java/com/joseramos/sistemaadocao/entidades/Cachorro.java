@@ -1,5 +1,4 @@
 package com.joseramos.sistemaadocao.entidades;
-import jakarta.persistence.*;
 
 public class Cachorro extends Animal {
 

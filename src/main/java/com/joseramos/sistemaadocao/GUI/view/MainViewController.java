@@ -1,29 +1,30 @@
 package com.joseramos.sistemaadocao.GUI.view;
 
 import com.joseramos.sistemaadocao.entidades.Adocao;
-import com.joseramos.sistemaadocao.entidades.Adotante;
 import com.joseramos.sistemaadocao.entidades.Animal;
+import com.joseramos.sistemaadocao.entidades.Adotante;
 import com.joseramos.sistemaadocao.excecoes.AnimalIndisponivelException;
 import com.joseramos.sistemaadocao.excecoes.LimiteAdocoesException;
 import com.joseramos.sistemaadocao.service.AdocaoService;
 import com.joseramos.sistemaadocao.service.AdotanteService;
 import com.joseramos.sistemaadocao.service.AnimalService;
-
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.*; // Importa Alert, Button, etc.
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional; // Necessário para a confirmação de remoção
 
 public class MainViewController {
 
     // --- Serviços (Backend) ---
-    // Estes serão "injetados" pela classe Main.java
     private AnimalService animalService;
     private AdotanteService adotanteService;
     private AdocaoService adocaoService;
@@ -32,9 +33,12 @@ public class MainViewController {
     @FXML private TableView<Animal> animaisTable;
     @FXML private TableColumn<Animal, Integer> colAnimalId;
     @FXML private TableColumn<Animal, String> colAnimalNome;
-    @FXML private TableColumn<Animal, String> colAnimalTipo; // (Vamos precisar de um getter para 'tipo' em Animal)
+    @FXML private TableColumn<Animal, String> colAnimalTipo;
     @FXML private TableColumn<Animal, String> colAnimalRaca;
     @FXML private TableColumn<Animal, String> colAnimalStatus;
+    @FXML private Button btnNovoAnimal;
+    @FXML private Button btnEditarAnimal; // (NOVO)
+    @FXML private Button btnRemoverAnimal; // (NOVO)
 
     // --- Componentes da Aba Adotantes ---
     @FXML private TableView<Adotante> adotantesTable;
@@ -42,6 +46,9 @@ public class MainViewController {
     @FXML private TableColumn<Adotante, String> colAdotanteNome;
     @FXML private TableColumn<Adotante, String> colAdotanteCpf;
     @FXML private TableColumn<Adotante, Integer> colAdotanteTotal;
+    @FXML private Button btnNovoAdotante;
+    @FXML private Button btnEditarAdotante; // (NOVO)
+    @FXML private Button btnRemoverAdotante; // (NOVO)
 
     // --- Componentes da Aba Adoções ---
     @FXML private TextField txtAdocaoIdAnimal;
@@ -50,28 +57,20 @@ public class MainViewController {
     @FXML private TableView<Adocao> adocoesTable;
     @FXML private TableColumn<Adocao, Integer> colAdocaoId;
     @FXML private TableColumn<Adocao, String> colAdocaoData;
-    @FXML private TableColumn<Adocao, String> colAdocaoAnimal; // (Vamos precisar de getters formatados)
+    @FXML private TableColumn<Adocao, String> colAdocaoAnimal;
     @FXML private TableColumn<Adocao, String> colAdocaoAdotante;
     @FXML private TextField txtFiltroAdotanteId;
     @FXML private Button btnFiltrarAdocoes;
     @FXML private Button btnLimparFiltroAdocoes;
 
 
-    /**
-     * Método de inicialização do Controller.
-     * Chamado automaticamente depois que o FXML é carregado.
-     * Usado para configurar as colunas das tabelas.
-     */
     @FXML
     public void initialize() {
         // Configura as colunas da tabela de Animais
-        // O valor "id", "nome", etc., DEVE corresponder ao nome do método getter
-        // na classe Animal (ex: getId(), getNome())
         colAnimalId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colAnimalNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colAnimalRaca.setCellValueFactory(new PropertyValueFactory<>("raca"));
         colAnimalStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-        // Para "tipo", precisamos de um getter na classe Animal
         colAnimalTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
 
         // Configura as colunas da tabela de Adotantes
@@ -82,15 +81,11 @@ public class MainViewController {
 
         // Configura as colunas da tabela de Adoções
         colAdocaoId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colAdocaoData.setCellValueFactory(new PropertyValueFactory<>("dataAdocaoFormatada")); // (Precisamos criar este getter em Adocao.java)
-        colAdocaoAnimal.setCellValueFactory(new PropertyValueFactory<>("nomeAnimal")); // (Precisamos criar este getter)
-        colAdocaoAdotante.setCellValueFactory(new PropertyValueFactory<>("nomeAdotante")); // (Precisamos criar este getter)
+        colAdocaoData.setCellValueFactory(new PropertyValueFactory<>("dataAdocaoFormatada"));
+        colAdocaoAnimal.setCellValueFactory(new PropertyValueFactory<>("nomeAnimal"));
+        colAdocaoAdotante.setCellValueFactory(new PropertyValueFactory<>("nomeAdotante"));
     }
 
-    /**
-     * Este é o método que a Main.java chama para injetar os serviços.
-     * Após injetar, carregamos os dados iniciais nas tabelas.
-     */
     public void setServices(AnimalService animalService, AdotanteService adotanteService, AdocaoService adocaoService) {
         this.animalService = animalService;
         this.adotanteService = adotanteService;
@@ -99,42 +94,133 @@ public class MainViewController {
         // Carrega os dados iniciais nas tabelas
         carregarAnimais();
         carregarAdotantes();
-        // Carrega todas as adoções por padrão (requer método no service)
         handleLimparFiltroAdocoes();
     }
 
     // --- MÉTODOS DE AÇÃO (HANDLERS) ---
 
+    // --- Handlers da Aba Animais (NOVOS E ATUALIZADOS) ---
+
+    @FXML
+    private void handleNovoAnimal() {
+        // Chama o método helper passando 'null' (pois é um animal novo)
+        boolean salvo = abrirFormularioAnimal(null);
+        if (salvo) {
+            carregarAnimais();
+        }
+    }
+
+    @FXML
+    private void handleEditarAnimal() {
+        Animal animalSelecionado = animaisTable.getSelectionModel().getSelectedItem();
+        if (animalSelecionado == null) {
+            mostrarAlerta("Nenhum Animal Selecionado", "Por favor, selecione um animal na tabela para editar.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        // Chama o método helper passando o animal selecionado
+        boolean salvo = abrirFormularioAnimal(animalSelecionado);
+        if (salvo) {
+            carregarAnimais();
+        }
+    }
+
+    @FXML
+    private void handleRemoverAnimal() {
+        Animal animalSelecionado = animaisTable.getSelectionModel().getSelectedItem();
+        if (animalSelecionado == null) {
+            mostrarAlerta("Nenhum Animal Selecionado", "Por favor, selecione um animal na tabela para remover.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        // (NOVO) Mostra pop-up de confirmação
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar Remoção");
+        alert.setHeaderText("Remover Animal: " + animalSelecionado.getNome());
+        alert.setContentText("Você tem certeza que deseja remover este animal?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                animalService.removerAnimal(animalSelecionado.getId());
+                carregarAnimais(); // Atualiza a tabela
+            } catch (Exception e) {
+                mostrarAlerta("Erro ao Remover", "Não foi possível remover o animal. Verifique se ele já não foi adotado.", Alert.AlertType.ERROR);
+            }
+        }
+    }
+
+    // --- Handlers da Aba Adotantes (NOVOS E ATUALIZADOS) ---
+
+    @FXML
+    private void handleNovoAdotante() {
+        boolean salvo = abrirFormularioAdotante(null);
+        if (salvo) {
+            carregarAdotantes();
+        }
+    }
+
+    @FXML
+    private void handleEditarAdotante() {
+        Adotante adotanteSelecionado = adotantesTable.getSelectionModel().getSelectedItem();
+        if (adotanteSelecionado == null) {
+            mostrarAlerta("Nenhum Adotante Selecionado", "Por favor, selecione um adotante na tabela para editar.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        boolean salvo = abrirFormularioAdotante(adotanteSelecionado);
+        if (salvo) {
+            carregarAdotantes();
+        }
+    }
+
+    @FXML
+    private void handleRemoverAdotante() {
+        Adotante adotanteSelecionado = adotantesTable.getSelectionModel().getSelectedItem();
+        if (adotanteSelecionado == null) {
+            mostrarAlerta("Nenhum Adotante Selecionado", "Por favor, selecione um adotante na tabela para remover.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar Remoção");
+        alert.setHeaderText("Remover Adotante: " + adotanteSelecionado.getNome());
+        alert.setContentText("Você tem certeza que deseja remover este adotante?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                adotanteService.removerAdotante(adotanteSelecionado.getId());
+                carregarAdotantes(); // Atualiza a tabela
+            } catch (Exception e) {
+                mostrarAlerta("Erro ao Remover", "Não foi possível remover o adotante. Verifique se ele possui adoções registradas.", Alert.AlertType.ERROR);
+            }
+        }
+    }
+
+    // --- Handlers da Aba Adoção (Sem mudanças) ---
+
     @FXML
     private void handleRealizarAdocao() {
         try {
-            // 1. Coletar dados da UI
             int idAnimal = Integer.parseInt(txtAdocaoIdAnimal.getText());
             int idAdotante = Integer.parseInt(txtAdocaoIdAdotante.getText());
 
-            // 2. Chamar o Serviço (Lógica de Negócio)
-            adocaoService.realizarAdocao(idAdotante, idAnimal); [cite: 37]
-
-            // 3. Sucesso
+            adocaoService.realizarAdocao(idAdotante, idAnimal);
             mostrarAlerta("Sucesso", "Adoção realizada com sucesso!", Alert.AlertType.INFORMATION);
 
-            // 4. Limpar campos e atualizar tabelas
             txtAdocaoIdAnimal.clear();
             txtAdocaoIdAdotante.clear();
 
-            // Atualiza as tabelas de animais e adotantes (pois o status/total mudou)
             carregarAnimais();
             carregarAdotantes();
-            // Atualiza a tabela de adoções
             handleLimparFiltroAdocoes();
 
         } catch (NumberFormatException e) {
             mostrarAlerta("Erro de Entrada", "IDs devem ser números válidos.", Alert.AlertType.ERROR);
         } catch (LimiteAdocoesException | AnimalIndisponivelException e) {
-            // Captura as exceções personalizadas (Regras de Negócio) [cite: 21]
             mostrarAlerta("Erro de Regra de Negócio", e.getMessage(), Alert.AlertType.WARNING);
         } catch (Exception e) {
-            // Captura outros erros (ex: Adotante não encontrado)
             mostrarAlerta("Erro", "Não foi possível realizar a adoção: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
@@ -143,9 +229,8 @@ public class MainViewController {
     private void handleFiltrarAdocoes() {
         try {
             int idAdotante = Integer.parseInt(txtFiltroAdotanteId.getText());
-            List<Adocao> adocoes = adocaoService.listarAdocoesPorAdotante(idAdotante); [cite: 17]
+            List<Adocao> adocoes = adocaoService.listarAdocoesPorAdotante(idAdotante);
             adocoesTable.setItems(FXCollections.observableArrayList(adocoes));
-
         } catch (NumberFormatException e) {
             mostrarAlerta("Erro de Entrada", "ID do adotante deve ser um número.", Alert.AlertType.ERROR);
         }
@@ -153,13 +238,108 @@ public class MainViewController {
 
     @FXML
     private void handleLimparFiltroAdocoes() {
-        // (Isso assume que você criou um método 'listarTodas' no seu AdocaoService/Repository)
-        // List<Adocao> adocoes = adocaoService.listarTodasAdocoes();
-        // adocoesTable.setItems(FXCollections.observableArrayList(adocoes));
+        try {
+            List<Adocao> adocoes = adocaoService.listarTodasAdocoes();
+            adocoesTable.setItems(FXCollections.observableArrayList(adocoes));
+            txtFiltroAdotanteId.clear();
+        } catch (Exception e) {
+            mostrarAlerta("Erro ao Carregar", "Não foi possível carregar a lista de adoções: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
 
-        // Por enquanto, vamos apenas limpar a tabela se o método não existir
-        adocoesTable.getItems().clear();
-        txtFiltroAdotanteId.clear();
+
+    // --- MÉTODOS "HELPER" PARA ABRIR FORMULÁRIOS (NOVOS) ---
+
+    /**
+     * Método auxiliar para abrir o formulário de Animal (tanto para Novo quanto Editar)
+     * @param animal O animal a ser editado (ou 'null' se for um novo animal)
+     * @return true se o formulário foi salvo, false se foi cancelado
+     */
+    private boolean abrirFormularioAnimal(Animal animal) {
+        try {
+            String fxmlPath = "/com/joseramos/sistemaadocao/view/AnimalForm.fxml";
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+
+            if (loader.getLocation() == null) {
+                throw new IOException("Não foi possível encontrar 'AnimalForm.fxml' em " + fxmlPath);
+            }
+
+            AnchorPane page = loader.load();
+            Stage dialogStage = new Stage();
+
+            if (animal == null) {
+                dialogStage.setTitle("Cadastrar Novo Animal");
+            } else {
+                dialogStage.setTitle("Editar Animal");
+            }
+
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(btnNovoAnimal.getScene().getWindow());
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            AnimalFormController controller = loader.getController();
+            controller.setAnimalService(this.animalService);
+            controller.setDialogStage(dialogStage);
+
+            // (NOVO) Se estamos editando, passa o animal para o controller
+            if (animal != null) {
+                controller.setAnimalParaEditar(animal);
+            }
+
+            dialogStage.showAndWait();
+            return controller.isSalvo();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Erro ao Abrir", "Não foi possível carregar 'AnimalForm.fxml'.\nVerifique se o arquivo está em 'resources/com/joseramos/sistemaadocao/GUI/view/'", Alert.AlertType.ERROR);
+            return false;
+        }
+    }
+
+    /**
+     * Método auxiliar para abrir o formulário de Adotante (tanto para Novo quanto Editar)
+     */
+    private boolean abrirFormularioAdotante(Adotante adotante) {
+        try {
+            String fxmlPath = "/com/joseramos/sistemaadocao/view/AdotanteForm.fxml";
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+
+            if (loader.getLocation() == null) {
+                throw new IOException("Não foi possível encontrar 'AdotanteForm.fxml' em " + fxmlPath);
+            }
+
+            AnchorPane page = loader.load();
+            Stage dialogStage = new Stage();
+
+            if (adotante == null) {
+                dialogStage.setTitle("Cadastrar Novo Adotante");
+            } else {
+                dialogStage.setTitle("Editar Adotante");
+            }
+
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(btnNovoAdotante.getScene().getWindow());
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            AdotanteFormController controller = loader.getController();
+            controller.setAdotanteService(this.adotanteService);
+            controller.setDialogStage(dialogStage);
+
+            // (NOVO) Se estamos editando, passa o adotante para o controller
+            if (adotante != null) {
+                controller.setAdotanteParaEditar(adotante);
+            }
+
+            dialogStage.showAndWait();
+            return controller.isSalvo();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Erro ao Abrir", "Não foi possível carregar 'AdotanteForm.fxml'.\nVerifique se o arquivo está em 'resources/com/joseramos/sistemaadocao/GUI/view/'", Alert.AlertType.ERROR);
+            return false;
+        }
     }
 
 
@@ -184,9 +364,4 @@ public class MainViewController {
         alert.setContentText(mensagem);
         alert.showAndWait();
     }
-
-    // NOTA: Os botões Novo/Editar/Remover (ex: btnNovoAnimal)
-    // não foram implementados. Eles exigiriam a criação de novas
-    // janelas (modais) para formulários, o que é um passo
-    // adicional de complexidade. O foco aqui foi o fluxo de adoção.
 }

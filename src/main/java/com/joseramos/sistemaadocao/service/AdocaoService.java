@@ -1,3 +1,5 @@
+
+package com.joseramos.sistemaadocao.service;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -54,7 +56,7 @@ public class AdocaoService {
 
         // 3. Valida Regra: Animal está DISPONIVEL? [cite: 20, 49]
         if (animal.getStatus() != StatusAnimal.DISPONIVEL) {
-            throw new AnimalIndisponivelException("O animal " + animal.getNome() +
+            throw new AnimalIndisponivelException("O animal " + animal.getNomeAnimal() +
                     " não está disponível para adoção (Status: " + animal.getStatus() + ").");
         }
 
@@ -83,5 +85,9 @@ public class AdocaoService {
 
     public List<Adocao> listarAdocoesPorPeriodo(LocalDate inicio, LocalDate fim) {
         return adocaoRepository.listarPorPeriodo(inicio, fim);
+    }
+
+    public List<Adocao> listarTodasAdocoes() {
+        return adocaoRepository.listarTodas();
     }
 }

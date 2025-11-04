@@ -147,4 +147,39 @@ public class AdocaoRepository {
 
         return adocao;
     }
+
+    // (Dentro da classe AdocaoRepository)
+
+    /**
+     * Lista TODAS as adoções cadastradas, sem filtro.
+     *
+     */
+    public List<Adocao> listarTodas() {
+        List<Adocao> adocoes = new ArrayList<>();
+        String sql = "SELECT * FROM adocoes"; // SQL simples para pegar tudo
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                // Reutiliza o método que já criamos para "montar" o objeto Adocao
+                adocoes.add(extrairAdocaoDoResultSet(rs));
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao listar todas as adoções: " + e.getMessage());
+        }
+        return adocoes;
+    }
+
+    // (Dentro da classe AdocaoService)
+
+    /**
+     * Lista todas as adoções registradas, sem filtro.
+     * Apenas repassa a chamada para o repositório.
+     */
+    public List<Adocao> listarTodasAdocoes() {
+        AdocaoRepository adocaoRepository = null;
+        return adocaoRepository.listarTodas();
+    }
 }

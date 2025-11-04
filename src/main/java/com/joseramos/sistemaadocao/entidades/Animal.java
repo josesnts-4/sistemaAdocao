@@ -1,28 +1,33 @@
 package com.joseramos.sistemaadocao.entidades;
 
 import com.joseramos.sistemaadocao.interfaces.CuidadosEspeciais;
-import jakarta.persistence.*;
-@Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+
 public abstract class Animal implements CuidadosEspeciais {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String nome;
+    private String nomeAnimal;
     private String raca;
     private Integer idade;;
     private StatusAnimal status;
+    private String tipo;
 
     public Animal() {
     }
 
     public Animal(String nome, String raca, Integer idade) {
-        this.nome = nome;
+        this.nomeAnimal = nome;
         this.raca = raca;
         this.idade = idade;
     }
 
+    public String getTipo() {
+        if (this instanceof Cachorro) {
+            return "Cachorro";
+        } else if (this instanceof Gato) {
+            return "Gato";
+        }
+        return "Indefinido";
+    }
     public Integer getId() {
         return id;
     }
@@ -39,12 +44,12 @@ public abstract class Animal implements CuidadosEspeciais {
         this.status = status;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeAnimal() {
+        return nomeAnimal;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeAnimal(String nomeAnimal) {
+        this.nomeAnimal = nomeAnimal;
     }
 
     public String getRaca() {

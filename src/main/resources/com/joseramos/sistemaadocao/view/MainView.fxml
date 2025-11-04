@@ -33,9 +33,9 @@
                         </TableView>
                         <VBox layoutX="575.0" layoutY="50.0" prefHeight="140.0" prefWidth="110.0" spacing="10.0">
                             <children>
-                                <Button fx:id="btnNovoAnimal" mnemonicParsing="false" prefWidth="100.0" text="Novo Animal..." />
-                                <Button fx:id="btnEditarAnimal" mnemonicParsing="false" prefWidth="100.0" text="Editar..." />
-                                <Button fx:id="btnRemoverAnimal" mnemonicParsing="false" prefWidth="100.0" text="Remover" />
+                                <Button fx:id="btnNovoAnimal" mnemonicParsing="false" onAction="#handleNovoAnimal" prefWidth="100.0" text="Novo Animal..." />
+                                <Button fx:id="btnEditarAnimal" mnemonicParsing="false" onAction="#handleEditarAnimal" prefWidth="100.0" text="Editar..." />
+                                <Button fx:id="btnRemoverAnimal" mnemonicParsing="false" onAction="#handleRemoverAnimal" prefWidth="100.0" text="Remover" />
                             </children>
                         </VBox>
                     </children>
@@ -62,9 +62,9 @@
                         </TableView>
                         <VBox layoutX="575.0" layoutY="50.0" prefHeight="140.0" prefWidth="110.0" spacing="10.0">
                             <children>
-                                <Button fx:id="btnNovoAdotante" mnemonicParsing="false" prefWidth="100.0" text="Novo Adotante..." />
-                                <Button fx:id="btnEditarAdotante" mnemonicParsing="false" prefWidth="100.0" text="Editar..." />
-                                <Button fx:id="btnRemoverAdotante" mnemonicParsing="false" prefWidth="100.0" text="Remover" />
+                                <Button fx:id="btnNovoAdotante" mnemonicParsing="false" onAction="#handleNovoAdotante" prefWidth="100.0" text="Novo Adotante..." />
+                                <Button fx:id="btnEditarAdotante" mnemonicParsing="false" onAction="#handleEditarAdotante" prefWidth="100.0" text="Editar..." />
+                                <Button fx:id="btnRemoverAdotante" mnemonicParsing="false" onAction="#handleRemoverAdotante" prefWidth="100.0" text="Remover" />
                             </children>
                         </VBox>
                     </children>
@@ -90,7 +90,7 @@
                                 <Font name="System Bold" size="12.0" />
                             </font>
                         </Button>
-                        <Label layoutX="14.0" layoutY="200.0" text="Listagem de Adoções (com filtros) [cite: 17]">
+                        <Label layoutX="14.0" layoutY="200.0" text="Listagem de Adoções (com filtros)">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
