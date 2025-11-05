@@ -66,25 +66,37 @@ public class MainViewController {
 
     @FXML
     public void initialize() {
-        // Configura as colunas da tabela de Animais
+        // --- Tabela de Animais ---
         colAnimalId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colAnimalNome.setCellValueFactory(new PropertyValueFactory<>("nomeAnimal"));
         colAnimalRaca.setCellValueFactory(new PropertyValueFactory<>("raca"));
         colAnimalStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colAnimalTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
 
-        // Configura as colunas da tabela de Adotantes
+        // --- Tabela de Adotantes ---
         colAdotanteId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colAdotanteNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colAdotanteCpf.setCellValueFactory(new PropertyValueFactory<>("cpf"));
         colAdotanteTotal.setCellValueFactory(new PropertyValueFactory<>("totalAdocoes"));
 
-        // Configura as colunas da tabela de Adoções
+        // --- Tabela de Adoções ---
         colAdocaoId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colAdocaoData.setCellValueFactory(new PropertyValueFactory<>("dataAdocaoFormatada"));
-        colAdocaoAnimal.setCellValueFactory(new PropertyValueFactory<>("nomeAnimal"));
-        colAdocaoAdotante.setCellValueFactory(new PropertyValueFactory<>("nomeAdotante"));
+
+        // 👇 CORRIGIDO:
+        colAdocaoAnimal.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(
+                        cellData.getValue().getAnimal() != null ? cellData.getValue().getAnimal().getNomeAnimal() : ""
+                )
+        );
+
+        colAdocaoAdotante.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(
+                        cellData.getValue().getAdotante() != null ? cellData.getValue().getAdotante().getNome() : ""
+                )
+        );
     }
+
 
     public void setServices(AnimalService animalService, AdotanteService adotanteService, AdocaoService adocaoService) {
         this.animalService = animalService;
