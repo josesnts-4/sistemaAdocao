@@ -68,7 +68,7 @@ public class MainViewController {
     public void initialize() {
         // Configura as colunas da tabela de Animais
         colAnimalId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colAnimalNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        colAnimalNome.setCellValueFactory(new PropertyValueFactory<>("nomeAnimal"));
         colAnimalRaca.setCellValueFactory(new PropertyValueFactory<>("raca"));
         colAnimalStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colAnimalTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
@@ -136,7 +136,7 @@ public class MainViewController {
         // (NOVO) Mostra pop-up de confirmação
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmar Remoção");
-        alert.setHeaderText("Remover Animal: " + animalSelecionado.getNome());
+        alert.setHeaderText("Remover Animal: " + animalSelecionado.getNomeAnimal());
         alert.setContentText("Você tem certeza que deseja remover este animal?");
 
         Optional<ButtonType> result = alert.showAndWait();

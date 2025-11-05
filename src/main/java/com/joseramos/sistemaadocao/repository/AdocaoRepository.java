@@ -182,4 +182,8 @@ public class AdocaoRepository {
         AdocaoRepository adocaoRepository = null;
         return adocaoRepository.listarTodas();
     }
+
+    public boolean existeAdocaoPorAdotante(int idAdotante) {
+        return listarPorAdotante(idAdotante).size() > 0;
+    }
 }

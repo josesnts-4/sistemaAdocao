@@ -27,7 +27,7 @@ public class AnimalService {
      */
     public void cadastrarAnimal(Animal animal) {
         // Exemplo de regra de negócio que você poderia adicionar:
-        if (animal.getNome() == null || animal.getNome().trim().isEmpty()) {
+        if (animal.getNomeAnimal() == null || animal.getNomeAnimal().trim().isEmpty()) {
             throw new IllegalArgumentException("O nome do animal não pode ser vazio.");
         }
 

@@ -21,7 +21,7 @@ public class Adocao {
         String dataFormatada = dataAdocao.format(formatter);
         return "===== Registro de Adoção ===== \n" + "Data: " + dataFormatada + "\n" +
                 "Adotante: " + adotante.getNome() + "(CPF: " + adotante.getCpf() +
-                "Animal: " + animal.getNome() + "\n" + "(Tipo: " + animal.getClass().getSimpleName() + ")";
+                "Animal: " + animal.getNomeAnimal() + "\n" + "(Tipo: " + animal.getClass().getSimpleName() + ")";
     }
     // Coloque estes métodos dentro da sua classe Adocao.java
 

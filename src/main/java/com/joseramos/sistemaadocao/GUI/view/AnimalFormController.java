@@ -51,7 +51,7 @@ public class AnimalFormController {
         this.animalParaEditar = animal;
 
         // Preenche os campos do formulário com os dados do animal
-        txtNome.setText(animal.getNome());
+        txtNome.setText(animal.getNomeAnimal());
         txtIdade.setText(String.valueOf(animal.getIdade()));
         txtRaca.setText(animal.getRaca());
         choiceTipo.setValue(animal.getTipo().toUpperCase());
@@ -83,7 +83,7 @@ public class AnimalFormController {
 
                 } else {
                     // 2. MODO EDITAR (ATUALIZAR ANIMAL)
-                    animalParaEditar.setNome(nome);
+                    animalParaEditar.setNomeAnimal(nome);
                     animalParaEditar.setIdade(idade);
                     animalParaEditar.setRaca(raca);
                     // (Status e Tipo não são alterados na edição)

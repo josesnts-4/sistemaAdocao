@@ -33,7 +33,7 @@ public class AnimalRepository {
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setString(1, animal.getNome());
+            pstmt.setString(1, animal.getNomeAnimal());
             pstmt.setInt(2, animal.getIdade());
             pstmt.setString(3, animal.getRaca());
 
@@ -77,7 +77,7 @@ public class AnimalRepository {
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, animal.getNome());
+            pstmt.setString(1, animal.getNomeAnimal());
             pstmt.setInt(2, animal.getIdade());
             pstmt.setString(3, animal.getRaca());
 
@@ -190,7 +190,7 @@ public class AnimalRepository {
 
         // Preenche os dados comuns da classe Abstrata Animal
         animal.setId(rs.getInt("id"));
-        animal.setNome(rs.getString("nome"));
+        animal.setNomeAnimal(rs.getString("nome"));
         animal.setIdade(rs.getInt("idade"));
         animal.setRaca(rs.getString("raca"));
 
