@@ -29,8 +29,6 @@
                                 <TableColumn fx:id="colAnimalTipo" prefWidth="100.0" text="Tipo" />
                                 <TableColumn fx:id="colAnimalRaca" prefWidth="140.0" text="Raça" />
                                 <TableColumn fx:id="colAnimalStatus" prefWidth="100.0" text="Status" />
-                                <TableColumn fx:id="colAnimalVacina" prefWidth="100.0" text="Vacina" />
-                                <TableColumn fx:id="colAnimalVermifugacao" prefWidth="100.0" text="Vermifugação" />
                             </columns>
                         </TableView>
                         <VBox layoutX="575.0" layoutY="50.0" prefHeight="140.0" prefWidth="110.0" spacing="10.0">

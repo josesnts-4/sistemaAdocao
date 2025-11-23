@@ -37,8 +37,6 @@ public class MainViewController {
     @FXML private TableColumn<Animal, String> colAnimalTipo;
     @FXML private TableColumn<Animal, String> colAnimalRaca;
     @FXML private TableColumn<Animal, String> colAnimalStatus;
-    @FXML private TableColumn<Animal, Boolean> colAnimalVacina;
-    @FXML private TableColumn<Animal, Boolean> colAnimalVermifugacao;
     @FXML private Button btnNovoAnimal;
     @FXML private Button btnEditarAnimal;
     @FXML private Button btnRemoverAnimal;
@@ -75,8 +73,6 @@ public class MainViewController {
         colAnimalRaca.setCellValueFactory(new PropertyValueFactory<>("raca"));
         colAnimalStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colAnimalTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-        colAnimalVacina.setCellValueFactory(new PropertyValueFactory<>("statusVacinaTexto"));
-        colAnimalVermifugacao.setCellValueFactory(new PropertyValueFactory<>("statusVermifugoTexto"));
 
         // --- Tabela de Adotantes ---
         colAdotanteId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -161,56 +157,6 @@ public class MainViewController {
             } catch (Exception e) {
                 mostrarAlerta("Erro ao Remover", "Não foi possível remover o animal. Verifique se ele já não foi adotado.", Alert.AlertType.ERROR);
             }
-        }
-    }
-    @FXML
-    private void handleVacinarAnimal() {
-        Animal animalSelecionado = animaisTable.getSelectionModel().getSelectedItem();
-
-        if (animalSelecionado == null) {
-            mostrarAlerta("Selecione um animal", "Selecione um animal na tabela para vacinar.", Alert.AlertType.WARNING);
-            return;
-        }
-
-        // 1. Chama o método da Interface implementado no Animal
-        animalSelecionado.vacinar();
-
-        // 2. Atualiza no Banco de Dados (Você precisará criar esse método no Service)
-        try {
-            animalService.atualizarAnimal(animalSelecionado);
-
-            // 3. Atualiza a Tabela visualmente
-            animaisTable.refresh();
-
-            mostrarAlerta("Sucesso", "Animal marcado como " + StatusCuidado.VACINADO, Alert.AlertType.INFORMATION);
-
-        } catch (Exception e) {
-            mostrarAlerta("Erro", "Erro ao salvar vacinação: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-    @FXML
-    private void handleVermifugarAnimal() {
-        Animal animalSelecionado = animaisTable.getSelectionModel().getSelectedItem();
-
-        if (animalSelecionado == null) {
-            mostrarAlerta("Selecione um animal", "Selecione um animal na tabela para vermifugar.", Alert.AlertType.WARNING);
-            return;
-        }
-
-        // 1. Chama o método da Interface implementado no Animal
-        animalSelecionado.vermifugar();
-
-        // 2. Atualiza no Banco de Dados (Você precisará criar esse método no Service)
-        try {
-            animalService.atualizarAnimal(animalSelecionado);
-
-            // 3. Atualiza a Tabela visualmente
-            animaisTable.refresh();
-
-            mostrarAlerta("Sucesso", "Animal marcado como " + StatusCuidado.VERMIFUGADO, Alert.AlertType.INFORMATION);
-
-        } catch (Exception e) {
-            mostrarAlerta("Erro", "Erro ao salvar vermifugo: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
