@@ -37,8 +37,8 @@ public class MainViewController {
     @FXML private TableColumn<Animal, String> colAnimalRaca;
     @FXML private TableColumn<Animal, String> colAnimalStatus;
     @FXML private Button btnNovoAnimal;
-    @FXML private Button btnEditarAnimal; // (NOVO)
-    @FXML private Button btnRemoverAnimal; // (NOVO)
+    @FXML private Button btnEditarAnimal;
+    @FXML private Button btnRemoverAnimal;
 
     // --- Componentes da Aba Adotantes ---
     @FXML private TableView<Adotante> adotantesTable;
@@ -47,8 +47,8 @@ public class MainViewController {
     @FXML private TableColumn<Adotante, String> colAdotanteCpf;
     @FXML private TableColumn<Adotante, Integer> colAdotanteTotal;
     @FXML private Button btnNovoAdotante;
-    @FXML private Button btnEditarAdotante; // (NOVO)
-    @FXML private Button btnRemoverAdotante; // (NOVO)
+    @FXML private Button btnEditarAdotante;
+    @FXML private Button btnRemoverAdotante;
 
     // --- Componentes da Aba Adoções ---
     @FXML private TextField txtAdocaoIdAnimal;
@@ -109,9 +109,6 @@ public class MainViewController {
         handleLimparFiltroAdocoes();
     }
 
-    // --- MÉTODOS DE AÇÃO (HANDLERS) ---
-
-    // --- Handlers da Aba Animais (NOVOS E ATUALIZADOS) ---
 
     @FXML
     private void handleNovoAnimal() {
@@ -145,7 +142,7 @@ public class MainViewController {
             return;
         }
 
-        // (NOVO) Mostra pop-up de confirmação
+        // Mostra pop-up de confirmação
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmar Remoção");
         alert.setHeaderText("Remover Animal: " + animalSelecionado.getNomeAnimal());
@@ -162,7 +159,7 @@ public class MainViewController {
         }
     }
 
-    // --- Handlers da Aba Adotantes (NOVOS E ATUALIZADOS) ---
+    // Handlers da Aba Adotantes
 
     @FXML
     private void handleNovoAdotante() {
@@ -204,13 +201,17 @@ public class MainViewController {
             try {
                 adotanteService.removerAdotante(adotanteSelecionado.getId());
                 carregarAdotantes(); // Atualiza a tabela
+
             } catch (Exception e) {
-                mostrarAlerta("Erro ao Remover", "Não foi possível remover o adotante. Verifique se ele possui adoções registradas.", Alert.AlertType.ERROR);
+                e.printStackTrace(); // ISSO VAI IMPRIMIR O ERRO REAL NO CONSOLE (IntelliJ)
+
+                // Mostra o motivo real na tela
+                mostrarAlerta("Erro Técnico", "Falha ao excluir: " + e.getMessage(), Alert.AlertType.ERROR);
             }
         }
     }
 
-    // --- Handlers da Aba Adoção (Sem mudanças) ---
+    // Handlers da Aba Adoção
 
     @FXML
     private void handleRealizarAdocao() {
@@ -231,7 +232,7 @@ public class MainViewController {
         } catch (NumberFormatException e) {
             mostrarAlerta("Erro de Entrada", "IDs devem ser números válidos.", Alert.AlertType.ERROR);
         } catch (LimiteAdocoesException | AnimalIndisponivelException e) {
-            mostrarAlerta("Erro de Regra de Negócio", e.getMessage(), Alert.AlertType.WARNING);
+            mostrarAlerta("Erro de limite de adoções", e.getMessage(), Alert.AlertType.WARNING);
         } catch (Exception e) {
             mostrarAlerta("Erro", "Não foi possível realizar a adoção: " + e.getMessage(), Alert.AlertType.ERROR);
         }
@@ -294,7 +295,7 @@ public class MainViewController {
             controller.setAnimalService(this.animalService);
             controller.setDialogStage(dialogStage);
 
-            // (NOVO) Se estamos editando, passa o animal para o controller
+            // Se estamos editando, passa o animal para o controller
             if (animal != null) {
                 controller.setAnimalParaEditar(animal);
             }
@@ -309,9 +310,8 @@ public class MainViewController {
         }
     }
 
-    /**
-     * Método auxiliar para abrir o formulário de Adotante (tanto para Novo quanto Editar)
-     */
+     // Método auxiliar para abrir o formulário de Adotante (tanto para Novo quanto Editar)
+
     private boolean abrirFormularioAdotante(Adotante adotante) {
         try {
             String fxmlPath = "/com/joseramos/sistemaadocao/view/AdotanteForm.fxml";
@@ -339,7 +339,7 @@ public class MainViewController {
             controller.setAdotanteService(this.adotanteService);
             controller.setDialogStage(dialogStage);
 
-            // (NOVO) Se estamos editando, passa o adotante para o controller
+            // Se estamos editando, passa o adotante para o controller
             if (adotante != null) {
                 controller.setAdotanteParaEditar(adotante);
             }
@@ -355,8 +355,7 @@ public class MainViewController {
     }
 
 
-    // --- MÉTODOS DE CARREGAMENTO DE DADOS ---
-
+    // Método de carregamento de dados
     private void carregarAnimais() {
         List<Animal> animais = animalService.listarAnimais();
         animaisTable.setItems(FXCollections.observableArrayList(animais));
@@ -367,7 +366,7 @@ public class MainViewController {
         adotantesTable.setItems(FXCollections.observableArrayList(adotantes));
     }
 
-    // --- MÉTODO UTILITÁRIO PARA POPUPS ---
+    // MÉTODO UTILITÁRIO PARA POPUPS
 
     private void mostrarAlerta(String titulo, String mensagem, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);

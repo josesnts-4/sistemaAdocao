@@ -17,4 +17,8 @@ public class Gato extends Animal {
     public void vacinar() {
         System.out.println("O gato " + getNomeAnimal() + " recebeu a vacina V4 (quíntupla felina).");
     }
+    @Override
+    public void vermifugar() {
+        System.out.println("O gato " + getNomeAnimal() + " recebeu vermifugos.");
+    }
 }

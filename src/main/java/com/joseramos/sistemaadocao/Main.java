@@ -34,10 +34,7 @@ public class Main extends Application {
 //        launch(args);
 //    }
 
-    /**
-     * init() é executado ANTES do start() (antes da UI).
-     * Este é o local correto para carregar dados.
-     */
+
     @Override
     public void init() throws Exception {
         System.out.println("Inicializando o sistema...");
@@ -47,7 +44,7 @@ public class Main extends Application {
 
         // 2. LIMPA OS DADOS ÓRFÃOS (AGORA QUE AS TABELAS EXISTEM)
         // (Também mudei para não ser 'static')
-//        limparDadosOrfaos();
+        // limparDadosOrfaos();
 
         // 3. Instancia os Repositórios
         AnimalRepository animalRepo = new AnimalRepository();
@@ -56,7 +53,7 @@ public class Main extends Application {
 
         // 4. Instancia os Serviços
         this.animalService = new AnimalService(animalRepo);
-        this.adotanteService = new AdotanteService(adotanteRepo);
+        this.adotanteService = new AdotanteService(adotanteRepo, adocaoRepo);
         this.adocaoService = new AdocaoService(adocaoRepo, animalRepo, adotanteRepo);
 
         System.out.println("Serviços prontos.");

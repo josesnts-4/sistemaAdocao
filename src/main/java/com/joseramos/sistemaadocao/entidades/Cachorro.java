@@ -18,4 +18,10 @@ public class Cachorro extends Animal {
     public void vacinar() {
         System.out.println("O cachorro " + getNomeAnimal() + " recebeu a vacina V10 (polivalente).");
     }
+
+    @Override
+    public void vermifugar() {
+        System.out.println("O cachorro " + getNomeAnimal() + " recebeu vermifugos.");
+    }
+
 }

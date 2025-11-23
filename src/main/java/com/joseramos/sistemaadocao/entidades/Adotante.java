@@ -17,10 +17,10 @@ public class Adotante {
         this.totalAdocoes = 0;
     }
 
-    public Adotante(String nome, String endereco, String cpf) {
+    public Adotante(String nome, String cpf, String endereco) {
         this.nome = nome;
-        this.endereco = endereco;
         this.cpf = cpf;
+        this.endereco = endereco;
         this.totalAdocoes = 0;
     }
 

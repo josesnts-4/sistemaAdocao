@@ -15,13 +15,12 @@ public class AdotanteService {
     private AdotanteRepository adotanteRepo;
 
     // O serviço depende do repositório
-    private AdotanteRepository adotanteRepository;
-
     /**
      * Construtor que recebe o repositório (Injeção de Dependência).
      */
-    public AdotanteService(AdotanteRepository adotanteRepository) {
-        this.adotanteRepository = adotanteRepository;
+    public AdotanteService(AdotanteRepository adotanteRepo, AdocaoRepository adocaoRepo) {
+        this.adotanteRepo = adotanteRepo;
+        this.adocaoRepo = adocaoRepo;
     }
 
     /**
@@ -38,14 +37,14 @@ public class AdotanteService {
         }
         // (Aqui poderia entrar uma lógica mais complexa de validação de CPF)
 
-        adotanteRepository.salvar(adotante);
+        adotanteRepo.salvar(adotante);
     }
 
     /**
      * Lista todos os adotantes cadastrados.
      */
     public List<Adotante> listarAdotantes() {
-        return adotanteRepository.listarTodos();
+        return adotanteRepo.listarTodos();
     }
 
     /**
@@ -53,7 +52,7 @@ public class AdotanteService {
      */
     public void atualizarAdotante(Adotante adotante) {
         // (Validações de atualização podem vir aqui)
-        adotanteRepository.atualizar(adotante);
+        adotanteRepo.atualizar(adotante);
     }
 
     /**
@@ -67,17 +66,14 @@ public class AdotanteService {
 
         // 2. APLICA A REGRA
         if (adotanteTemAdocoes) {
-            // Se ele tem, lançamos uma exceção e a remoção é BARRADA
-            throw new Exception("Não é possível remover este adotante. Ele possui adoções em seu histórico.");
-        } else {
-            // Se ele não tem, a remoção é segura
-            adotanteRepo.remover(idAdotante);
+            throw new Exception("Este adotante possui histórico de adoções e não pode ser removido.");
         }
+        adotanteRepo.remover(idAdotante);
     }
     /**
      * Busca um adotante pelo seu ID.
      */
     public Adotante buscarPorId(int id) {
-        return adotanteRepository.buscarPorId(id);
+        return adotanteRepo.buscarPorId(id);
     }
 }
