@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.ComboBox?>
 <TabPane fx:id="mainTabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.joseramos.sistemaadocao.GUI.view.MainViewController">
     <tabs>
         <Tab text="Gerenciar Animais">
@@ -86,9 +87,9 @@
                             </font>
                         </Label>
                         <Label layoutX="14.0" layoutY="60.0" text="ID do Animal para Adotar:" />
-                        <TextField fx:id="txtAdocaoIdAnimal" layoutX="160.0" layoutY="55.0" promptText="Ex: 1" />
+                        <ComboBox fx:id="comboAdocaoAnimal" layoutX="160.0" layoutY="55.0" prefWidth="200.0" promptText="Selecione o Animal" />
                         <Label layoutX="14.0" layoutY="95.0" text="ID do Adotante:" />
-                        <TextField fx:id="txtAdocaoIdAdotante" layoutX="160.0" layoutY="90.0" promptText="Ex: 2" />
+                        <ComboBox fx:id="comboAdocaoAdotante" layoutX="160.0" layoutY="90.0" prefWidth="200.0" promptText="Selecione o Adotante" />
                         <Button fx:id="btnRealizarAdocao" layoutX="160.0" layoutY="130.0" mnemonicParsing="false" onAction="#handleRealizarAdocao" prefWidth="149.0" text="CONFIRMAR ADOÇÃO">
                             <font>
                                 <Font name="System Bold" size="12.0" />
@@ -107,10 +108,10 @@
                                 <TableColumn fx:id="colAdocaoAdotante" prefWidth="240.0" text="Adotante" />
                             </columns>
                         </TableView>
-                        <Label layoutX="340.0" layoutY="60.0" text="Filtrar por ID do Adotante:" />
-                        <TextField fx:id="txtFiltroAdotanteId" layoutX="490.0" layoutY="55.0" promptText="Ex: 2" />
-                        <Button fx:id="btnFiltrarAdocoes" layoutX="490.0" layoutY="90.0" mnemonicParsing="false" onAction="#handleFiltrarAdocoes" prefWidth="149.0" text="Filtrar" />
-                        <Button fx:id="btnLimparFiltroAdocoes" layoutX="490.0" layoutY="130.0" mnemonicParsing="false" onAction="#handleLimparFiltroAdocoes" prefWidth="149.0" text="Limpar Filtro / Ver Todas" />
+                        <Label layoutX="390.0" layoutY="60.0" text="Filtrar por ID do Adotante:" />
+                        <TextField fx:id="txtFiltroAdotanteId" layoutX="540.0" layoutY="55.0" promptText="Ex: 2" />
+                        <Button fx:id="btnFiltrarAdocoes" layoutX="540.0" layoutY="90.0" mnemonicParsing="false" onAction="#handleFiltrarAdocoes" prefWidth="149.0" text="Filtrar" />
+                        <Button fx:id="btnLimparFiltroAdocoes" layoutX="540.0" layoutY="130.0" mnemonicParsing="false" onAction="#handleLimparFiltroAdocoes" prefWidth="149.0" text="Limpar Filtro" />
                     </children>
                 </AnchorPane>
             </content>

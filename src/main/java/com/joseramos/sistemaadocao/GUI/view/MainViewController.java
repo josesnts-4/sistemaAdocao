@@ -56,8 +56,8 @@ public class MainViewController {
     @FXML private Button btnRemoverAdotante;
 
     // --- Componentes da Aba Adoções ---
-    @FXML private TextField txtAdocaoIdAnimal;
-    @FXML private TextField txtAdocaoIdAdotante;
+    @FXML private ComboBox<Animal> comboAdocaoAnimal;
+    @FXML private ComboBox<Adotante> comboAdocaoAdotante;
     @FXML private Button btnRealizarAdocao;
     @FXML private TableView<Adocao> adocoesTable;
     @FXML private TableColumn<Adocao, Integer> colAdocaoId;
@@ -105,18 +105,63 @@ public class MainViewController {
                         cellData.getValue().getAdotante() != null ? cellData.getValue().getAdotante().getNome() : ""
                 )
         );
+        // Configura como o Animal vai aparecer no ComboBox
+        comboAdocaoAnimal.setConverter(new javafx.util.StringConverter<Animal>() {
+            @Override
+            public String toString(Animal animal) {
+                if (animal == null) return null;
+                // Mostra: "ID - Nome (Tipo)"
+                return animal.getId() + " - " + animal.getNomeAnimal() + " (" + animal.getTipo() + ")";
+            }
+
+            @Override
+            public Animal fromString(String string) {
+                return null; // Não precisamos converter de volta para edição
+            }
+        });
+
+        // Configura como o Adotante vai aparecer no ComboBox
+        comboAdocaoAdotante.setConverter(new javafx.util.StringConverter<Adotante>() {
+            @Override
+            public String toString(Adotante adotante) {
+                if (adotante == null) return null;
+                return adotante.getId() + " - " + adotante.getNome();
+            }
+
+            @Override
+            public Adotante fromString(String string) {
+                return null;
+            }
+        });
     }
 
+    private void carregarCombosAdocao() {
+        // 1. Carregar Animais DISPONÍVEIS (Filtro importante!)
+        List<Animal> todosAnimais = animalService.listarAnimais();
+
+        // Filtra apenas os que estão DISPONÍVEIS para adoção
+        List<Animal> animaisDisponiveis = todosAnimais.stream()
+                .filter(a -> "DISPONIVEL".equals(a.getStatus().toString()))
+                .toList();
+
+        comboAdocaoAnimal.setItems(FXCollections.observableArrayList(animaisDisponiveis));
+
+        // 2. Carregar Adotantes
+        List<Adotante> adotantes = adotanteService.listarAdotantes();
+        comboAdocaoAdotante.setItems(FXCollections.observableArrayList(adotantes));
+    }
 
     public void setServices(AnimalService animalService, AdotanteService adotanteService, AdocaoService adocaoService) {
         this.animalService = animalService;
         this.adotanteService = adotanteService;
         this.adocaoService = adocaoService;
 
-        // Carrega os dados iniciais nas tabelas
         carregarAnimais();
         carregarAdotantes();
         handleLimparFiltroAdocoes();
+
+        // ADICIONE ESTA LINHA:
+        carregarCombosAdocao();
     }
 
 
@@ -275,19 +320,27 @@ public class MainViewController {
 
     @FXML
     private void handleRealizarAdocao() {
-        try {
-            int idAnimal = Integer.parseInt(txtAdocaoIdAnimal.getText());
-            int idAdotante = Integer.parseInt(txtAdocaoIdAdotante.getText());
+        Animal animalSelecionado = comboAdocaoAnimal.getValue();
+        Adotante adotanteSelecionado = comboAdocaoAdotante.getValue();
 
-            adocaoService.realizarAdocao(idAdotante, idAnimal);
+        if (animalSelecionado == null || adotanteSelecionado == null) {
+            mostrarAlerta("Campos Obrigatórios", "Por favor, selecione um Animal e um Adotante.", Alert.AlertType.WARNING);
+            return;
+        }
+        try {
+// 3. Chama o serviço usando os IDs dos objetos selecionados
+            adocaoService.realizarAdocao(adotanteSelecionado.getId(), animalSelecionado.getId());
+
             mostrarAlerta("Sucesso", "Adoção realizada com sucesso!", Alert.AlertType.INFORMATION);
 
-            txtAdocaoIdAnimal.clear();
-            txtAdocaoIdAdotante.clear();
+            // 4. Limpa os campos e atualiza tudo (inclusive os combos, para remover o animal adotado da lista)
+            comboAdocaoAnimal.setValue(null);
+            comboAdocaoAdotante.setValue(null);
 
             carregarAnimais();
             carregarAdotantes();
             handleLimparFiltroAdocoes();
+            carregarCombosAdocao(); // Atualiza a lista para o animal não aparecer mais como disponível
 
         } catch (NumberFormatException e) {
             mostrarAlerta("Erro de Entrada", "IDs devem ser números válidos.", Alert.AlertType.ERROR);
