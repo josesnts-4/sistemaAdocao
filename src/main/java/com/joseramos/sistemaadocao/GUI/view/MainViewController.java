@@ -51,6 +51,7 @@ public class MainViewController {
     @FXML private TableColumn<Adotante, String> colAdotanteNome;
     @FXML private TableColumn<Adotante, String> colAdotanteCpf;
     @FXML private TableColumn<Adotante, Integer> colAdotanteTotal;
+    @FXML private TableColumn<Adotante, String> colAdotanteEndereco;
     @FXML private Button btnNovoAdotante;
     @FXML private Button btnEditarAdotante;
     @FXML private Button btnRemoverAdotante;
@@ -88,6 +89,7 @@ public class MainViewController {
         colAdotanteNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colAdotanteCpf.setCellValueFactory(new PropertyValueFactory<>("cpf"));
         colAdotanteTotal.setCellValueFactory(new PropertyValueFactory<>("totalAdocoes"));
+        colAdotanteEndereco.setCellValueFactory(new PropertyValueFactory<>("endereco"));
 
         // --- Tabela de Adoções ---
         colAdocaoId.setCellValueFactory(new PropertyValueFactory<>("id"));
