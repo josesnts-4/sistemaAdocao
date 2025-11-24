@@ -86,7 +86,9 @@ public abstract class Animal implements CuidadosEspeciais {
 
     // Getters booleanos padrões (necessários para lógica interna)
     public boolean isVacinado() { return vacinado; }
+    public void setVacinado(boolean vacinado) { this.vacinado = vacinado; }
     public boolean isVermifugado() { return vermifugado; }
+    public void setVermifugado(boolean vermifugado) { this.vermifugado = vermifugado; }
 
     public abstract void emitirSom();
 

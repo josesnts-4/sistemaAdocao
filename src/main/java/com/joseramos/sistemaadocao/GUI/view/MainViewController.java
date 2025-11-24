@@ -37,9 +37,13 @@ public class MainViewController {
     @FXML private TableColumn<Animal, String> colAnimalTipo;
     @FXML private TableColumn<Animal, String> colAnimalRaca;
     @FXML private TableColumn<Animal, String> colAnimalStatus;
+    @FXML private TableColumn<Animal, String> colAnimalVacinado;
+    @FXML private TableColumn<Animal, String> colAnimalVermifugado;
     @FXML private Button btnNovoAnimal;
     @FXML private Button btnEditarAnimal;
     @FXML private Button btnRemoverAnimal;
+    @FXML private Button btnVacinarAnimal;
+    @FXML private Button btnVermifugarAnimal;
 
     // --- Componentes da Aba Adotantes ---
     @FXML private TableView<Adotante> adotantesTable;
@@ -73,6 +77,11 @@ public class MainViewController {
         colAnimalRaca.setCellValueFactory(new PropertyValueFactory<>("raca"));
         colAnimalStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colAnimalTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        colAnimalVacinado.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getStatusVacinaTexto()));
+
+        colAnimalVermifugado.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getStatusVermifugoTexto()));
 
         // --- Tabela de Adotantes ---
         colAdotanteId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -159,6 +168,56 @@ public class MainViewController {
             }
         }
     }
+        @FXML
+        private void handleVacinarAnimal() {
+            Animal animalSelecionado = animaisTable.getSelectionModel().getSelectedItem();
+
+            if (animalSelecionado == null) {
+                mostrarAlerta("Selecione um animal", "Selecione um animal na tabela para vacinar.", Alert.AlertType.WARNING);
+                return;
+            }
+
+            // 1. Chama o método da Interface implementado no Animal
+            animalSelecionado.vacinar();
+
+            animaisTable.refresh();
+
+            // 2. Atualiza no Banco de Dados (Você precisará criar esse método no Service)
+            try {
+                animalService.atualizarAnimal(animalSelecionado);
+
+                mostrarAlerta("Sucesso", "Animal marcado como " + StatusCuidado.VACINADO, Alert.AlertType.INFORMATION);
+
+            } catch (Exception e) {
+                mostrarAlerta("Erro", "Erro ao salvar vacinação: " + e.getMessage(), Alert.AlertType.ERROR);
+            }
+        }
+    @FXML
+    private void handleVermifugarAnimal() {
+        Animal animalSelecionado = animaisTable.getSelectionModel().getSelectedItem();
+
+        if (animalSelecionado == null) {
+            mostrarAlerta("Selecione um animal", "Selecione um animal na tabela para vermifugar.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        // 1. Chama o método da Interface implementado no Animal
+        animalSelecionado.vermifugar();
+
+        animaisTable.refresh();
+
+
+        // 2. Atualiza no Banco de Dados (Você precisará criar esse método no Service)
+        try {
+            animalService.atualizarAnimal(animalSelecionado);
+
+            mostrarAlerta("Sucesso", "Animal marcado como " + StatusCuidado.VERMIFUGADO, Alert.AlertType.INFORMATION);
+
+        } catch (Exception e) {
+            mostrarAlerta("Erro", "Erro ao salvar vermifugo: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
 
     // Handlers da Aba Adotantes
 

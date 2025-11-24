@@ -29,6 +29,8 @@
                                 <TableColumn fx:id="colAnimalTipo" prefWidth="100.0" text="Tipo" />
                                 <TableColumn fx:id="colAnimalRaca" prefWidth="140.0" text="Raça" />
                                 <TableColumn fx:id="colAnimalStatus" prefWidth="100.0" text="Status" />
+                                <TableColumn fx:id="colAnimalVacinado" prefWidth="100.0" text="Vacinado" />
+                                <TableColumn fx:id="colAnimalVermifugado" prefWidth="100.0" text="Vermifugado" />
                             </columns>
                         </TableView>
                         <VBox layoutX="575.0" layoutY="50.0" prefHeight="140.0" prefWidth="110.0" spacing="10.0">
@@ -36,6 +38,8 @@
                                 <Button fx:id="btnNovoAnimal" mnemonicParsing="false" onAction="#handleNovoAnimal" prefWidth="100.0" text="Novo Animal..." />
                                 <Button fx:id="btnEditarAnimal" mnemonicParsing="false" onAction="#handleEditarAnimal" prefWidth="100.0" text="Editar..." />
                                 <Button fx:id="btnRemoverAnimal" mnemonicParsing="false" onAction="#handleRemoverAnimal" prefWidth="100.0" text="Remover" />
+                                <Button fx:id="btnVacinarAnimal" mnemonicParsing="false" onAction="#handleVacinarAnimal" prefWidth="100.0" text="Vacinar" />
+                                <Button fx:id="btnVermifugarAnimal" mnemonicParsing="false" onAction="#handleVermifugarAnimal" prefWidth="100.0" text="Vermifugar" />
                             </children>
                         </VBox>
                     </children>

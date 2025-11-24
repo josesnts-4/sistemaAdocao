@@ -8,27 +8,20 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-// (Importe suas classes de modelo e a ConnectionFactory)
 import com.joseramos.sistemaadocao.entidades.Animal;
 import com.joseramos.sistemaadocao.entidades.Cachorro;
 import com.joseramos.sistemaadocao.entidades.Gato;
-import com.joseramos.sistemaadocao.entidades.StatusAnimal; // (O Enum: DISPONIVEL, ADOTADO)
+import com.joseramos.sistemaadocao.entidades.StatusAnimal;
 import com.joseramos.sistemaadocao.connection.ConnectionFactory;
 
-/**
- * Classe responsável pela persistência (CRUD) da entidade Animal
- * e suas subclasses (Cachorro, Gato) no banco de dados SQLite.
- *
- */
 public class AnimalRepository {
 
     /**
      * Salva um novo animal no banco de dados (Create).
-     * Este método lida com o polimorfismo (Cachorro ou Gato).
-     *
      */
     public Animal salvar(Animal animal) {
-        String sql = "INSERT INTO animais (nome, idade, raca, tipo, status) VALUES (?, ?, ?, ?, ?)";
+        // ATUALIZADO: Adicionadas colunas 'vacinado' e 'vermifugado'
+        String sql = "INSERT INTO animais (nome, idade, raca, tipo, status, vacinado, vermifugado) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -37,24 +30,24 @@ public class AnimalRepository {
             pstmt.setInt(2, animal.getIdade());
             pstmt.setString(3, animal.getRaca());
 
-            // --- Lógica de Polimorfismo (Salvar) ---
-            // Verifica a classe concreta do objeto 'animal'
+            // Lógica de Polimorfismo
             if (animal instanceof Cachorro) {
                 pstmt.setString(4, "CACHORRO");
             } else if (animal instanceof Gato) {
                 pstmt.setString(4, "GATO");
             } else {
-                // Caso de fallback, embora não devesse acontecer
                 pstmt.setString(4, "OUTRO");
             }
-            // ------------------------------------------
 
-            // Salva o status (ex: "DISPONIVEL")
             pstmt.setString(5, animal.getStatus().toString());
+
+            // --- NOVOS CAMPOS ---
+            // Salva o estado boolean no banco (SQLite aceita boolean como 0 ou 1)
+            pstmt.setBoolean(6, animal.isVacinado());
+            pstmt.setBoolean(7, animal.isVermifugado());
 
             pstmt.executeUpdate();
 
-            // Recupera o ID gerado pelo banco
             ResultSet generatedKeys = pstmt.getGeneratedKeys();
             if (generatedKeys.next()) {
                 animal.setId(generatedKeys.getInt(1));
@@ -67,12 +60,12 @@ public class AnimalRepository {
     }
 
     /**
-     * Atualiza um animal existente no banco de dados (Update).
-     *
-     * Essencial para o fluxo de adoção (para alterar 'status' para ADOTADO).
+     * Atualiza um animal existente (Update).
+     * Fundamental para o botão "Vacinar" funcionar.
      */
     public void atualizar(Animal animal) {
-        String sql = "UPDATE animais SET nome = ?, idade = ?, raca = ?, tipo = ?, status = ? WHERE id = ?";
+        // ATUALIZADO: Adicionamos 'vacinado = ?' e 'vermifugado = ?'
+        String sql = "UPDATE animais SET nome = ?, idade = ?, raca = ?, tipo = ?, status = ?, vacinado = ?, vermifugado = ? WHERE id = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -81,7 +74,6 @@ public class AnimalRepository {
             pstmt.setInt(2, animal.getIdade());
             pstmt.setString(3, animal.getRaca());
 
-            // Lógica de Polimorfismo (Atualizar)
             if (animal instanceof Cachorro) {
                 pstmt.setString(4, "CACHORRO");
             } else if (animal instanceof Gato) {
@@ -91,7 +83,12 @@ public class AnimalRepository {
             }
 
             pstmt.setString(5, animal.getStatus().toString());
-            pstmt.setInt(6, animal.getId()); // ID é o filtro
+
+            // --- ATUALIZAÇÃO DOS STATUS DE CUIDADO ---
+            pstmt.setBoolean(6, animal.isVacinado());
+            pstmt.setBoolean(7, animal.isVermifugado());
+
+            pstmt.setInt(8, animal.getId()); // O ID é o último parâmetro
 
             pstmt.executeUpdate();
 
@@ -100,10 +97,6 @@ public class AnimalRepository {
         }
     }
 
-    /**
-     * Remove um animal do banco de dados (Delete).
-     *
-     */
     public void remover(int id) {
         String sql = "DELETE FROM animais WHERE id = ?";
 
@@ -118,11 +111,6 @@ public class AnimalRepository {
         }
     }
 
-    /**
-     * Lista todos os animais cadastrados (Read).
-     * Este método lida com o polimorfismo (instancia Cachorro ou Gato).
-     *
-     */
     public List<Animal> listarTodos() {
         List<Animal> animais = new ArrayList<>();
         String sql = "SELECT * FROM animais";
@@ -132,7 +120,6 @@ public class AnimalRepository {
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                // O método auxiliar cuida do polimorfismo
                 Animal animal = extrairAnimalDoResultSet(rs);
                 animais.add(animal);
             }
@@ -142,10 +129,6 @@ public class AnimalRepository {
         return animais;
     }
 
-    /**
-     * Busca um animal específico pelo seu ID (Read).
-     *
-     */
     public Animal buscarPorId(int id) {
         String sql = "SELECT * FROM animais WHERE id = ?";
         Animal animal = null;
@@ -163,39 +146,48 @@ public class AnimalRepository {
         } catch (SQLException e) {
             System.err.println("Erro ao buscar animal por ID: " + e.getMessage());
         }
-        return animal; // Retorna null se não encontrar
+        return animal;
     }
 
     /**
-     * Método utilitário privado para "mapear" uma linha do ResultSet
-     * para o objeto correto (Cachorro ou Gato).
+     * Método auxiliar para mapear os dados do banco para o objeto.
      */
     private Animal extrairAnimalDoResultSet(ResultSet rs) throws SQLException {
 
         String tipo = rs.getString("tipo");
         Animal animal;
 
-        // --- Lógica de Polimorfismo (Carregar) ---
-        // Instancia a classe CORRETA com base na coluna "tipo"
         if ("CACHORRO".equalsIgnoreCase(tipo)) {
             animal = new Cachorro();
         } else if ("GATO".equalsIgnoreCase(tipo)) {
             animal = new Gato();
         } else {
-            // Se o tipo for desconhecido, podemos lançar um erro ou usar um padrão.
-            // Vamos lançar um erro para sinalizar dados inválidos.
-            throw new SQLException("Tipo de animal desconhecido no banco: " + tipo);
+            // Fallback seguro para evitar crash se o banco tiver lixo
+            // Em um sistema real, logariamos um erro.
+            animal = new Cachorro();
         }
-        // ------------------------------------------
 
-        // Preenche os dados comuns da classe Abstrata Animal
         animal.setId(rs.getInt("id"));
         animal.setNomeAnimal(rs.getString("nome"));
         animal.setIdade(rs.getInt("idade"));
         animal.setRaca(rs.getString("raca"));
-
-        // Converte a String do banco de volta para o Enum
         animal.setStatus(StatusAnimal.valueOf(rs.getString("status")));
+
+        // --- RECUPERAÇÃO DOS STATUS (IMPORTANTE) ---
+        // O banco devolve true/false. Nós passamos para o objeto.
+
+        // Se a coluna não existir no banco antigo, o getBoolean retorna false (seguro)
+        try {
+            boolean vacinado = rs.getBoolean("vacinado");
+            boolean vermifugado = rs.getBoolean("vermifugado");
+
+            animal.setVacinado(vacinado);
+            animal.setVermifugado(vermifugado);
+
+        } catch (SQLException e) {
+            // Ignora se as colunas não existirem ainda (retrocompatibilidade)
+            System.out.println("Aviso: Colunas de vacina/vermifugo não encontradas ou erro ao ler.");
+        }
 
         return animal;
     }

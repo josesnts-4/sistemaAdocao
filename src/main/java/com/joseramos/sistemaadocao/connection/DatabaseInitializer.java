@@ -29,7 +29,9 @@ public class DatabaseInitializer {
                 + " idade INTEGER,"
                 + " raca TEXT,"
                 + " tipo TEXT NOT NULL," // "CACHORRO" ou "GATO"
-                + " status TEXT NOT NULL" // "DISPONIVEL" ou "ADOTADO"
+                + " status TEXT NOT NULL," // "DISPONIVEL" ou "ADOTADO"
+                + " vacinado BOOLEAN DEFAULT 0,"
+                + " vermifugado BOOLEAN DEFAULT 0"
                 + ");";
 
         // SQL para criar a tabela de Adoções
